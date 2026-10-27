@@ -1,253 +1,1332 @@
 <!DOCTYPE html>
-<!-- lang="vi" khai báo ngôn ngữ trang → hỗ trợ screen reader & SEO -->
 <html lang="vi">
 
 <head>
-  <!-- ========== METADATA BẮT BUỘC ========== -->
   <meta charset="UTF-8" />
-  <!-- viewport: nền tảng của responsive mobile-first, khóa tỉ lệ 1:1 với thiết bị -->
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="Portfolio CV của Phạm Quốc Hùng – Frontend Developer. Dự án, kỹ năng và thông tin liên hệ." />
   <meta name="author" content="Phạm Quốc Hùng" />
-  <title>Phạm Quốc Hùng · Frontend Developer</title>
+  <title>Phạm Quốc Hùng (HùngKanji) · Cyber Portfolio</title>
 
-  <!-- Liên kết tới file CSS tách rời (yêu cầu của bài) -->
+  <!-- Google Fonts & FontAwesome -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700;800&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Space+Grotesk:wght@700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+  <!-- File CSS của bài tập (Đặt trước để bị ghi đè bởi CSS Cyber bên dưới) -->
   <link rel="stylesheet" href="./assets/css/styles.css" />
-</head>
-<!-- Thêm Tailwind CSS và FontAwesome để render form liên hệ -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-      /* Reset lại một chút xung đột nếu có giữa file styles.css của bạn và Tailwind */
-      .input-field:focus {
-          outline: none;
-          box-shadow: 0 0 0 2px rgba(0,0,0,0.1);
-      }
-  </style>
-<body>
 
-  <!-- ========================================================== -->
-  <!-- HEADER: nhận diện + điều hướng chính                        -->
-  <!-- ========================================================== -->
+  <style>
+    :root {
+      --bg-deep: #06060e;
+      --pink: #ff2a85;
+      --purple: #9d4edd;
+      --cyan: #00f5d4;
+      --gold: #ffbe0b;
+      --blue: #3a86ff;
+      --card-bg: rgba(14, 14, 28, 0.78);
+    }
+
+    body[data-theme="aincrad"] {
+      --pink: #b5179e;
+      --purple: #7209b7;
+      --cyan: #4cc9f0;
+      --gold: #f72585;
+    }
+
+    body[data-theme="valorant"] {
+      --pink: #ff4655;
+      --purple: #bd3944;
+      --cyan: #00e5ff;
+      --gold: #ece8e1;
+    }
+
+    * {
+      box-sizing: border-box !important;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    /* KHÓA CỨNG NỀN TỐI - Chống styles.css biến .hero hoặc .section thành màu trắng */
+    html, body, main, .hero, .section, .section-muted, footer {
+      background-color: transparent !important;
+      background-image: none !important;
+      color: #f8fafc !important;
+    }
+
+    body {
+      background-color: var(--bg-deep) !important;
+      font-family: 'Plus Jakarta Sans', sans-serif !important;
+      line-height: 1.6;
+      overflow-x: hidden;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* Quầng sáng Đa Sắc (Aurora Orbs) phía sau */
+    .aurora-bg {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(circle at 12% 18%, rgba(255, 42, 133, 0.32), transparent 35%),
+        radial-gradient(circle at 88% 22%, rgba(0, 245, 212, 0.22), transparent 35%),
+        radial-gradient(circle at 50% 60%, rgba(157, 78, 221, 0.25), transparent 45%),
+        radial-gradient(circle at 20% 85%, rgba(58, 134, 255, 0.22), transparent 35%),
+        linear-gradient(180deg, #05050a 0%, #090916 50%, #05050a 100%);
+    }
+
+    /* Lưới Cyber 3D */
+    .cyber-grid {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background-image:
+        linear-gradient(rgba(255, 42, 133, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 245, 212, 0.05) 1px, transparent 1px);
+      background-size: 45px 45px;
+    }
+
+    /* Canvas Hạt Neon tương tác chuột */
+    #cyberCanvas {
+      position: fixed;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+    }
+
+    .site-header, main, footer, .cyber-marquee {
+      position: relative;
+      z-index: 5;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 1180px !important;
+      margin: 0 auto !important;
+      padding: 0 22px !important;
+    }
+
+    h1, h2, h3, .brand-name {
+      font-family: 'Space Grotesk', sans-serif !important;
+    }
+
+    .mono {
+      font-family: 'JetBrains Mono', monospace !important;
+    }
+
+    a {
+      text-decoration: none !important;
+    }
+
+    ul {
+      list-style: none !important;
+    }
+
+    /* ================= HEADER ================= */
+    .site-header {
+      position: sticky !important;
+      top: 0 !important;
+      z-index: 100 !important;
+      background: rgba(8, 8, 18, 0.82) !important;
+      backdrop-filter: blur(20px) !important;
+      border-bottom: 1px solid rgba(255, 42, 133, 0.3) !important;
+      box-shadow: 0 4px 30px rgba(255, 42, 133, 0.12) !important;
+      padding: 14px 0 !important;
+    }
+
+    .header-inner {
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+      flex-wrap: wrap !important;
+      gap: 16px !important;
+    }
+
+    .brand {
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+    }
+
+    .brand-mark {
+      width: 44px !important;
+      height: 44px !important;
+      border-radius: 12px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      font-weight: 800 !important;
+      font-size: 20px !important;
+      color: #fff !important;
+      background: linear-gradient(135deg, var(--pink), var(--purple), var(--cyan)) !important;
+      box-shadow: 0 0 20px rgba(255, 42, 133, 0.6) !important;
+    }
+
+    .brand-name {
+      font-size: 19px !important;
+      font-weight: 700 !important;
+      background: linear-gradient(90deg, #fff, var(--pink), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .brand-sub {
+      display: block;
+      font-size: 11px;
+      color: var(--cyan) !important;
+      letter-spacing: 2px;
+    }
+
+    .nav-list {
+      display: flex !important;
+      align-items: center !important;
+      gap: 26px !important;
+    }
+
+    .nav-list a {
+      color: #e2e8f0 !important;
+      font-weight: 600 !important;
+      font-size: 14px !important;
+      position: relative;
+      padding: 6px 0;
+      transition: 0.3s;
+    }
+
+    .nav-list a:hover {
+      color: var(--cyan) !important;
+      text-shadow: 0 0 12px var(--cyan);
+    }
+
+    .theme-btn {
+      cursor: pointer;
+      padding: 8px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--pink);
+      background: linear-gradient(135deg, rgba(255, 42, 133, 0.2), rgba(157, 78, 221, 0.2));
+      color: #fff !important;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 0 15px rgba(255, 42, 133, 0.35);
+      transition: 0.3s;
+    }
+
+    .theme-btn:hover {
+      transform: scale(1.05);
+      border-color: var(--cyan);
+      box-shadow: 0 0 22px var(--cyan);
+    }
+
+    /* ================= HERO (KHÔNG BAO GIỜ BỊ CHỮ MỜ) ================= */
+    .hero {
+      padding: 70px 0 60px !important;
+    }
+
+    .hero-inner {
+      display: grid !important;
+      grid-template-columns: 1.25fr 0.85fr !important;
+      gap: 48px !important;
+      align-items: center !important;
+    }
+
+    .eyebrow {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      padding: 8px 18px !important;
+      border-radius: 999px !important;
+      background: rgba(255, 42, 133, 0.14) !important;
+      border: 1px solid rgba(255, 42, 133, 0.5) !important;
+      color: #ff7aa8 !important;
+      font-size: 12px !important;
+      font-weight: 700 !important;
+      letter-spacing: 1.5px !important;
+      margin-bottom: 18px !important;
+      box-shadow: 0 0 20px rgba(255, 42, 133, 0.25);
+    }
+
+    .pulse-dot {
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--cyan);
+      box-shadow: 0 0 12px var(--cyan);
+      animation: pulseGlow 1.5s infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { transform: scale(1); opacity: 1; }
+      50% { transform: scale(1.4); opacity: 0.6; }
+    }
+
+    /* TÊN RỰC RỠ 4 MÀU CHUYỂN ĐỘNG - Không dùng màu trắng ở đầu để tránh chìm chữ */
+    .hero-title {
+      font-size: clamp(40px, 5.5vw, 64px) !important;
+      font-weight: 800 !important;
+      line-height: 1.12 !important;
+      margin-bottom: 16px !important;
+      background: linear-gradient(
+        90deg,
+        #ff2a85 0%,
+        #00f5d4 30%,
+        #ffbe0b 60%,
+        #b5179e 85%,
+        #ff2a85 100%
+      ) !important;
+      background-size: 200% auto !important;
+      -webkit-background-clip: text !important;
+      -webkit-text-fill-color: transparent !important;
+      animation: shineText 5s linear infinite !important;
+      filter: drop-shadow(0 6px 24px rgba(255, 42, 133, 0.35));
+    }
+
+    @keyframes shineText {
+      to { background-position: 200% center; }
+    }
+
+    .hero-role {
+      font-size: 21px !important;
+      font-weight: 700 !important;
+      color: #ffffff !important;
+      margin-bottom: 18px !important;
+      display: flex !important;
+      align-items: center !important;
+      gap: 12px !important;
+      flex-wrap: wrap !important;
+    }
+
+    .typewriter-text {
+      color: var(--cyan) !important;
+      text-shadow: 0 0 14px rgba(0, 245, 212, 0.5);
+      border-right: 2px solid var(--pink);
+      padding-right: 6px;
+    }
+
+    .kanji-badge {
+      font-size: 13px !important;
+      padding: 5px 14px !important;
+      border-radius: 8px !important;
+      background: linear-gradient(135deg, var(--pink), var(--purple)) !important;
+      color: #ffffff !important;
+      font-weight: 700 !important;
+      box-shadow: 0 0 18px rgba(255, 42, 133, 0.5);
+    }
+
+    .hero-desc {
+      color: #cbd5e1 !important;
+      font-size: 16px !important;
+      margin-bottom: 26px !important;
+      max-width: 580px !important;
+      line-height: 1.75 !important;
+    }
+
+    .hero-desc strong {
+      color: var(--cyan) !important;
+    }
+
+    /* 3 Ô THỐNG KÊ ĐA SẮC */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      max-width: 500px;
+      margin-bottom: 30px;
+    }
+
+    .stat-card {
+      background: rgba(18, 18, 36, 0.85) !important;
+      border-radius: 16px;
+      padding: 14px 16px;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .stat-card.pink-stat { border-color: rgba(255, 42, 133, 0.5); box-shadow: 0 8px 20px -6px rgba(255, 42, 133, 0.3); }
+    .stat-card.cyan-stat { border-color: rgba(0, 245, 212, 0.5); box-shadow: 0 8px 20px -6px rgba(0, 245, 212, 0.3); }
+    .stat-card.gold-stat { border-color: rgba(255, 190, 11, 0.5); box-shadow: 0 8px 20px -6px rgba(255, 190, 11, 0.3); }
+
+    .stat-num {
+      font-size: 22px;
+      font-weight: 800;
+    }
+
+    .pink-stat .stat-num { color: var(--pink) !important; }
+    .cyan-stat .stat-num { color: var(--cyan) !important; }
+    .gold-stat .stat-num { color: var(--gold) !important; }
+
+    .stat-lbl {
+      font-size: 12px;
+      color: #e2e8f0 !important;
+    }
+
+    /* NÚT BẤM CYBER */
+    .hero-actions {
+      display: flex !important;
+      gap: 16px !important;
+      flex-wrap: wrap !important;
+    }
+
+    .btn {
+      display: inline-flex !important;
+      align-items: center !important;
+      gap: 10px !important;
+      padding: 14px 28px !important;
+      border-radius: 14px !important;
+      font-weight: 700 !important;
+      font-size: 15px !important;
+      transition: all 0.3s ease !important;
+      cursor: pointer;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--pink), var(--purple), #3a86ff) !important;
+      background-size: 200% 200% !important;
+      color: #ffffff !important;
+      border: none !important;
+      box-shadow: 0 10px 28px -4px rgba(255, 42, 133, 0.65) !important;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-4px) scale(1.03) !important;
+      box-shadow: 0 14px 35px -2px rgba(0, 245, 212, 0.6) !important;
+    }
+
+    .btn-outline {
+      background: rgba(18, 18, 36, 0.9) !important;
+      color: var(--cyan) !important;
+      border: 1.5px solid var(--cyan) !important;
+      box-shadow: 0 0 20px rgba(0, 245, 212, 0.2) !important;
+    }
+
+    .btn-outline:hover {
+      background: var(--cyan) !important;
+      color: #05050a !important;
+      transform: translateY(-4px) !important;
+      box-shadow: 0 0 30px var(--cyan) !important;
+    }
+
+    /* KHUNG AVATAR HOLOGRAM 7 MÀU */
+    .hero-avatar {
+      display: flex !important;
+      justify-content: center !important;
+      position: relative !important;
+    }
+
+    .avatar-holo {
+      position: relative;
+      padding: 5px;
+      border-radius: 28px;
+      background: linear-gradient(135deg, var(--pink), var(--cyan), var(--gold), var(--purple), var(--pink));
+      background-size: 300% 300%;
+      animation: gradientBorder 4s ease infinite;
+      box-shadow:
+        0 0 40px rgba(255, 42, 133, 0.5),
+        0 0 70px rgba(0, 245, 212, 0.25);
+    }
+
+    @keyframes gradientBorder {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+
+    .avatar-holo img {
+      width: 320px !important;
+      height: 320px !important;
+      object-fit: cover !important;
+      border-radius: 24px !important;
+      display: block !important;
+    }
+
+    .floating-tag {
+      position: absolute;
+      background: rgba(10, 10, 22, 0.92);
+      border: 1px solid var(--cyan);
+      padding: 8px 14px;
+      border-radius: 12px;
+      font-size: 12px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.6);
+      animation: floatY 3s ease-in-out infinite;
+    }
+
+    .floating-tag.top-right {
+      top: -14px;
+      right: -14px;
+      border-color: var(--gold);
+      color: var(--gold);
+    }
+
+    .floating-tag.bottom-left {
+      bottom: -14px;
+      left: -14px;
+      border-color: var(--cyan);
+      color: var(--cyan);
+      animation-delay: 1.5s;
+    }
+
+    @keyframes floatY {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    /* ================= DẢI BĂNG CHUYỀN CYBER MARQUEE ================= */
+    .cyber-marquee {
+      background: linear-gradient(90deg, rgba(255, 42, 133, 0.18), rgba(157, 78, 221, 0.18), rgba(0, 245, 212, 0.18));
+      border-top: 1px solid rgba(255, 42, 133, 0.35);
+      border-bottom: 1px solid rgba(0, 245, 212, 0.35);
+      padding: 12px 0;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .marquee-track {
+      display: inline-block;
+      animation: scrollMarquee 22s linear infinite;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 2px;
+      color: #fff;
+    }
+
+    .marquee-track span {
+      margin: 0 24px;
+      color: var(--cyan);
+    }
+
+    @keyframes scrollMarquee {
+      from { transform: translateX(0); }
+      to { transform: translateX(-50%); }
+    }
+
+    /* ================= SECTIONS CHUNG ================= */
+    .section {
+      padding: 72px 0 !important;
+    }
+
+    .section-header {
+      margin-bottom: 40px;
+    }
+
+    .section-eyebrow {
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: 2.5px;
+      color: var(--cyan) !important;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      display: block;
+    }
+
+    .section-title {
+      font-size: 36px !important;
+      font-weight: 800 !important;
+      background: linear-gradient(90deg, #ffffff, var(--pink), var(--cyan));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: inline-block;
+      margin-bottom: 8px !important;
+    }
+
+    .section-sub {
+      color: #cbd5e1 !important;
+      font-size: 15px !important;
+    }
+
+    /* ================= SKILLS ĐA SẮC KÈM THANH LEVEL ================= */
+    .skill-grid {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)) !important;
+      gap: 22px !important;
+    }
+
+    .skill-chip {
+      background: var(--card-bg) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+      border-radius: 18px !important;
+      padding: 22px !important;
+      transition: all 0.35s ease !important;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(14px);
+    }
+
+    .skill-chip:hover {
+      transform: translateY(-6px) scale(1.01) !important;
+      border-color: var(--skill-color, var(--pink)) !important;
+      box-shadow: 0 12px 30px -8px var(--skill-color, var(--pink)) !important;
+    }
+
+    .skill-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 14px;
+    }
+
+    .skill-info {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .skill-icon {
+      width: 46px;
+      height: 46px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 22px;
+      color: var(--skill-color);
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--skill-color);
+      box-shadow: 0 0 15px -3px var(--skill-color);
+    }
+
+    .skill-name {
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff !important;
+    }
+
+    .skill-desc {
+      font-size: 12px;
+      color: #94a3b8 !important;
+    }
+
+    .skill-pct {
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--skill-color) !important;
+    }
+
+    .skill-bar {
+      width: 100%;
+      height: 7px;
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 999px;
+      overflow: hidden;
+    }
+
+    .skill-fill {
+      height: 100%;
+      border-radius: 999px;
+      background: linear-gradient(90deg, var(--skill-color), #ffffff);
+      box-shadow: 0 0 12px var(--skill-color);
+    }
+
+    /* ================= PROJECTS GRID (THẺ NEON ĐA SẮC) ================= */
+    .project-grid {
+      display: grid !important;
+      grid-template-columns: repeat(auto-fit, minmax(460px, 1fr)) !important;
+      gap: 28px !important;
+    }
+
+    .card {
+      background: var(--card-bg) !important;
+      border: 1px solid rgba(255, 255, 255, 0.14) !important;
+      border-radius: 22px !important;
+      overflow: hidden !important;
+      display: flex !important;
+      flex-direction: column !important;
+      transition: all 0.35s ease !important;
+      backdrop-filter: blur(16px);
+    }
+
+    .card:hover {
+      transform: translateY(-8px) !important;
+      border-color: var(--card-accent, var(--pink)) !important;
+      box-shadow: 0 18px 40px -12px var(--card-accent, var(--pink)) !important;
+    }
+
+    .card-media-box {
+      position: relative;
+      height: 230px;
+      overflow: hidden;
+      background: #101020;
+    }
+
+    .card-media {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+      transition: transform 0.6s ease !important;
+    }
+
+    .card:hover .card-media {
+      transform: scale(1.08) !important;
+    }
+
+    .card-chip {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      padding: 5px 14px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 800;
+      background: rgba(6, 6, 14, 0.85);
+      color: var(--card-accent, var(--cyan)) !important;
+      border: 1px solid var(--card-accent, var(--cyan));
+      box-shadow: 0 0 15px rgba(0,0,0,0.6);
+    }
+
+    .card-body {
+      padding: 24px !important;
+      display: flex !important;
+      flex-direction: column !important;
+      justify-content: space-between !important;
+      flex: 1 !important;
+      gap: 18px !important;
+      background: transparent !important;
+    }
+
+    .card-title {
+      font-size: 22px !important;
+      font-weight: 800 !important;
+      color: #ffffff !important;
+      margin-bottom: 6px !important;
+    }
+
+    .card-desc {
+      color: #cbd5e1 !important;
+      font-size: 14px !important;
+    }
+
+    .card-bottom {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding-top: 14px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .tag-list {
+      display: flex !important;
+      gap: 8px !important;
+      flex-wrap: wrap !important;
+    }
+
+    .tag-list li {
+      font-size: 12px !important;
+      font-weight: 700 !important;
+      padding: 4px 12px !important;
+      border-radius: 8px !important;
+      background: rgba(255, 255, 255, 0.08) !important;
+      color: var(--card-accent, var(--cyan)) !important;
+      border: 1px solid rgba(255, 255, 255, 0.12) !important;
+    }
+
+    .card-link {
+      font-size: 14px !important;
+      font-weight: 700 !important;
+      color: #ffffff !important;
+      padding: 6px 14px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--pink), var(--purple));
+      transition: 0.3s;
+    }
+
+    .card-link:hover {
+      box-shadow: 0 0 15px var(--pink);
+      transform: translateX(3px);
+    }
+
+    /* ================= CONTACT FORM CYBER ================= */
+    .contact-wrap {
+      position: relative;
+      border-radius: 26px;
+      padding: 3px;
+      background: linear-gradient(135deg, var(--pink), var(--cyan), var(--purple));
+      box-shadow: 0 20px 60px -15px rgba(255, 42, 133, 0.35);
+    }
+
+    .contact-inner {
+      background: #0b0b18 !important;
+      border-radius: 24px;
+      overflow: hidden;
+      display: grid;
+      grid-template-columns: 5fr 7fr;
+      position: relative;
+    }
+
+    .contact-img-side {
+      position: relative;
+      min-height: 380px;
+    }
+
+    .contact-img-side img {
+      width: 100% !important;
+      height: 100% !important;
+      object-fit: cover !important;
+    }
+
+    .contact-form-side {
+      padding: 44px 96px 44px 44px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: var(--cyan) !important;
+      margin-bottom: 8px;
+    }
+
+    .input-field {
+      width: 100% !important;
+      padding: 13px 16px !important;
+      border-radius: 12px !important;
+      background: rgba(255, 255, 255, 0.05) !important;
+      border: 1px solid rgba(255, 255, 255, 0.16) !important;
+      color: #ffffff !important;
+      font-size: 14px !important;
+      transition: 0.25s !important;
+    }
+
+    .input-field:focus {
+      outline: none !important;
+      border-color: var(--pink) !important;
+      box-shadow: 0 0 0 3px rgba(255, 42, 133, 0.3) !important;
+    }
+
+    .social-bar {
+      position: absolute;
+      right: 22px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: rgba(16, 16, 32, 0.95);
+      border: 1px solid var(--cyan);
+      border-radius: 999px;
+      padding: 20px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 22px;
+      box-shadow: 0 0 25px rgba(0, 245, 212, 0.25);
+    }
+
+    .social-bar a {
+      color: #ffffff !important;
+      font-size: 20px;
+      transition: 0.25s;
+      display: flex;
+      justify-content: center;
+    }
+
+    .social-bar a:hover {
+      color: var(--pink) !important;
+      transform: scale(1.2);
+    }
+
+    footer {
+      border-top: 1px solid rgba(255, 255, 255, 0.1) !important;
+      padding: 28px 0 !important;
+      text-align: center !important;
+      color: #94a3b8 !important;
+      font-size: 13px !important;
+    }
+
+    @media (max-width: 920px) {
+      .hero-inner, .contact-inner, .project-grid, .form-grid {
+        grid-template-columns: 1fr !important;
+      }
+      .contact-form-side {
+        padding: 32px 24px;
+      }
+      .social-bar {
+        position: static;
+        transform: none;
+        flex-direction: row;
+        justify-content: center;
+        margin: 0 24px 24px;
+      }
+    }
+  </style>
+</head>
+
+<body data-theme="blackpink">
+
+  <!-- Nền Aurora + Lưới + Hạt Laser tương tác chuột -->
+  <div class="aurora-bg" aria-hidden="true"></div>
+  <div class="cyber-grid" aria-hidden="true"></div>
+  <canvas id="cyberCanvas"></canvas>
+
+  <!-- ================= HEADER ================= -->
   <header class="site-header">
     <div class="container header-inner">
-      <!-- Thương hiệu cá nhân -->
       <a class="brand" href="#top" aria-label="Về đầu trang">
         <span class="brand-mark" aria-hidden="true">H</span>
-        <span class="brand-name">Phạm Quốc Hùng</span>
+        <div>
+          <span class="brand-name">Phạm Quốc Hùng</span>
+          <span class="brand-sub mono">⚡ HÙNGKANJI · CYBER UI</span>
+        </div>
       </a>
 
-      <!-- NAV dùng Flexbox (xem styles.css) -->
-      <nav class="main-nav" aria-label="Điều hướng chính">
-        <ul class="nav-list">
-          <li><a href="#about">Giới thiệu</a></li>
-          <li><a href="#skills">Kỹ năng</a></li>
-          <li><a href="#projects">Dự án</a></li>
-          <li><a href="#contact">Liên hệ</a></li>
-        </ul>
-      </nav>
+      <div style="display:flex; align-items:center; gap:24px; flex-wrap:wrap;">
+        <nav class="main-nav" aria-label="Điều hướng chính">
+          <ul class="nav-list">
+            <li><a href="#about">Giới thiệu</a></li>
+            <li><a href="#skills">Kỹ năng</a></li>
+            <li><a href="#projects">Dự án</a></li>
+            <li><a href="#contact">Liên hệ</a></li>
+          </ul>
+        </nav>
+
+        <button id="themeToggle" type="button" class="theme-btn mono">
+          <i class="fas fa-wand-magic-sparkles"></i>
+          <span id="themeLabel">Neon·Cyber</span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- ========================================================== -->
-  <!-- MAIN: toàn bộ nội dung chính của trang                      -->
-  <!-- ========================================================== -->
+  <!-- ================= MAIN ================= -->
   <main id="top">
-    <!-- ----- SECTION: Giới thiệu / Hero ----- -->
+
+    <!-- ----- SECTION: HERO ----- -->
     <section id="about" class="hero">
       <div class="container hero-inner">
         <div class="hero-text">
-          <p class="eyebrow">Xin chào, tôi là</p>
-          <h1 class="hero-title">Phạm Quốc Hùng</h1>
-          <p class="hero-role">Frontend Developer &amp; UI Enthusiast</p>
-          <p class="hero-desc">
-            Tôi xây dựng giao diện web sạch sẽ, dễ tiếp cận và responsive.
-            Tốt nghiệp ngành Công nghệ thông tin, yêu thích HTML/CSS ngữ nghĩa
-            và trải nghiệm người dùng tối giản.
+          <p class="eyebrow mono">
+            <span class="pulse-dot"></span>
+            WELCOME TO MY DIGITAL REALM · XIN CHÀO, TÔI LÀ
           </p>
+
+          <h1 class="hero-title">Phạm Quốc Hùng</h1>
+
+          <p class="hero-role">
+            <span id="typewriter" class="typewriter-text mono">Frontend Developer &amp; UI Enthusiast</span>
+            <span class="kanji-badge mono">#HùngKanji</span>
+          </p>
+
+          <p class="hero-desc">
+            Tôi xây dựng giao diện web <strong>sắc nét, tốc độ cao và chuẩn responsive</strong>.
+            Đam mê Công nghệ thông tin, yêu thích HTML/CSS ngữ nghĩa, tối ưu trải nghiệm
+            người dùng và phong cách thiết kế mang đậm cá tính riêng.
+          </p>
+
+          <div class="stats-grid">
+            <div class="stat-card pink-stat">
+              <div class="stat-num mono">04+</div>
+              <div class="stat-lbl">Dự án Web/Game</div>
+            </div>
+            <div class="stat-card cyan-stat">
+              <div class="stat-num mono">100%</div>
+              <div class="stat-lbl">Responsive UI</div>
+            </div>
+            <div class="stat-card gold-stat">
+              <div class="stat-num mono">240Hz</div>
+              <div class="stat-lbl">Tư duy Tốc độ</div>
+            </div>
+          </div>
+
           <div class="hero-actions">
-            <a class="btn btn-primary" href="#projects">Xem dự án</a>
-            <a class="btn btn-outline" href="#contact">Liên hệ tôi</a>
+            <a class="btn btn-primary" href="#projects">
+              <i class="fas fa-bolt"></i> Khám phá dự án
+            </a>
+            <a class="btn btn-outline" href="#contact">
+              <i class="fas fa-paper-plane"></i> Liên hệ ngay
+            </a>
           </div>
         </div>
 
-        <!-- Ảnh đại diện: dùng placeholder, thay bằng ảnh thật của bạn -->
         <figure class="hero-avatar">
-          <img
-            src="./assets/img/hung.jpg"
-            alt="Ảnh đại diện của Phạm Quốc Hùng"
-            width="320" height="320" />
+          <div class="avatar-holo">
+            <img src="./assets/img/hung.jpg" alt="Ảnh đại diện của Phạm Quốc Hùng" width="320" height="320" />
+            <div class="floating-tag top-right mono">
+              <i class="fas fa-crown"></i> LEVEL 99 DEV
+            </div>
+            <div class="floating-tag bottom-left mono">
+              <i class="fas fa-code"></i> @HùngKanji
+            </div>
+          </div>
         </figure>
       </div>
     </section>
 
-    <!-- ----- SECTION: Kỹ năng ----- -->
+    <!-- DẢI BĂNG CHUYỀN CYBER -->
+    <div class="cyber-marquee mono" aria-hidden="true">
+      <div class="marquee-track">
+        ⚡ PHẠM QUỐC HÙNG <span>//</span> FRONTEND DEVELOPER <span>//</span> @HÙNGKANJI <span>//</span> HTML5 · CSS3 · JAVASCRIPT <span>//</span> UI/UX ENTHUSIAST <span>//</span> FPS &amp; CUSTOM HARDWARE <span>//</span>
+        ⚡ PHẠM QUỐC HÙNG <span>//</span> FRONTEND DEVELOPER <span>//</span> @HÙNGKANJI <span>//</span> HTML5 · CSS3 · JAVASCRIPT <span>//</span> UI/UX ENTHUSIAST <span>//</span> FPS &amp; CUSTOM HARDWARE <span>//</span>
+      </div>
+    </div>
+
+    <!-- ----- SECTION: KỸ NĂNG ----- -->
     <section id="skills" class="section">
       <div class="container">
-        <h2 class="section-title">Kỹ năng</h2>
-        <p class="section-sub">Những công nghệ và kỹ năng tôi sử dụng thường xuyên.</p>
+        <div class="section-header">
+          <span class="section-eyebrow mono">// TECH STACK &amp; ARSENAL</span>
+          <h2 class="section-title">Kỹ năng công nghệ</h2>
+          <p class="section-sub">Những công nghệ và vũ khí lập trình tôi sử dụng thường xuyên.</p>
+        </div>
 
         <ul class="skill-grid">
-          <li class="skill-chip">HTML5</li>
-          <li class="skill-chip">CSS3 / Flexbox / Grid</li>
-          <li class="skill-chip">JavaScript (ES6+)</li>
-          <li class="skill-chip">Responsive Design</li>
-          <li class="skill-chip">Git &amp; GitHub</li>
-          <li class="skill-chip">Figma / Wireframe</li>
+          <li class="skill-chip" style="--skill-color: #ff5400;">
+            <div class="skill-top">
+              <div class="skill-info">
+                <span class="skill-icon"><i class="fab fa-html5"></i></span>
+                <div>
+                  <div class="skill-name">HTML5</div>
+                  <div class="skill-desc">Semantic Markup &amp; Chuẩn SEO</div>
+                </div>
+              </div>
+              <span class="skill-pct mono">95%</span>
+            </div>
+            <div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
+          </li>
+
+          <li class="skill-chip" style="--skill-color: #00f5d4;">
+            <div class="skill-top">
+              <div class="skill-info">
+                <span class="skill-icon"><i class="fab fa-css3-alt"></i></span>
+                <div>
+                  <div class="skill-name">CSS3 / Flexbox / Grid</div>
+                  <div class="skill-desc">Modern Layout &amp; Neon Effects</div>
+                </div>
+              </div>
+              <span class="skill-pct mono">92%</span>
+            </div>
+            <div class="skill-bar"><div class="skill-fill" style="width:92%"></div></div>
+          </li>
+
+          <li class="skill-chip" style="--skill-color: #ffbe0b;">
+            <div class="skill-top">
+              <div class="skill-info">
+                <span class="skill-icon"><i class="fab fa-js"></i></span>
+                <div>
+                  <div class="skill-name">JavaScript (ES6+)</div>
+                  <div class="skill-desc">DOM, Fetch API &amp; Hiệu ứng động</div>
+                </div>
+              </div>
+              <span class="skill-pct mono">86%</span>
+            </div>
+            <div class="skill-bar"><div class="skill-fill" style="width:86%"></div></div>
+          </li>
+
+          <li class="skill-chip" style="--skill-color: #ff2a85;">
+            <div class="skill-top">
+              <div class="skill-info">
+                <span class="skill-icon"><i class="fas fa-mobile-screen-button"></i></span>
+                <div>
+                  <div class="skill-name">Responsive Design</div>
+                  <div class="skill-desc">Mobile-First &amp; Đa thiết bị</div>
+                </div>
+              </div>
+              <span class="skill-pct mono">95%</span>
+            </div>
+            <div class="skill-bar"><div class="skill-fill" style="width:95%"></div></div>
+          </li>
+
+          <li class="skill-chip" style="--skill-color: #b5179e;">
+            <div class="skill-top">
+              <div class="skill-info">
+                <span class="skill-icon"><i class="fab fa-git-alt"></i></span>
+                <div>
+                  <div class="skill-name">Git &amp; GitHub</div>
+                  <div class="skill-desc">Quản lý phiên bản &amp; Releases</div>
+                </div>
+              </div>
+              <span class="skill-pct mono">90%</span>
+            </div>
+            <div class="skill-bar"><div class="skill-fill" style="width:90%"></div></div>
+          </li>
+
+          <li class="skill-chip" style="--skill-color: #3a86ff;">
+            <div class="skill-top">
+              <div class="skill-info">
+                <span class="skill-icon"><i class="fab fa-figma"></i></span>
+                <div>
+                  <div class="skill-name">Figma / Wireframe</div>
+                  <div class="skill-desc">Thiết kế giao diện UI/UX</div>
+                </div>
+              </div>
+              <span class="skill-pct mono">88%</span>
+            </div>
+            <div class="skill-bar"><div class="skill-fill" style="width:88%"></div></div>
+          </li>
         </ul>
       </div>
     </section>
 
-    <!-- ----- SECTION: Dự án (danh sách thẻ dùng CSS Grid) ----- -->
+    <!-- ----- SECTION: DỰ ÁN ----- -->
     <section id="projects" class="section section-muted">
       <div class="container">
-        <h2 class="section-title">Dự án tiêu biểu</h2>
-        <p class="section-sub">Một vài sản phẩm tôi đã thực hiện.</p>
+        <div class="section-header">
+          <span class="section-eyebrow mono">// FEATURED SHOWCASE</span>
+          <h2 class="section-title">Dự án tiêu biểu</h2>
+          <p class="section-sub">Một vài sản phẩm tâm huyết tôi đã thực hiện.</p>
+        </div>
 
-        <!-- .project-grid dùng CSS Grid (xem styles.css) -->
         <div class="project-grid">
-
-          <!-- Mỗi thẻ là một <article> độc lập, có thể đứng riêng -->
-          <article class="card">
-            <img class="card-media"
-              src="./assets/img/javalorant.png"
-              alt="Ảnh minh họa dự án Javalorant" width="600" height="360" />
+          <article class="card" style="--card-accent: #ff2a85;">
+            <div class="card-media-box">
+              <img class="card-media" src="./assets/img/javalorant.png" alt="Ảnh minh họa dự án Javalorant" width="600" height="360" />
+              <span class="card-chip mono">⚡ FPS PROJECT</span>
+            </div>
             <div class="card-body">
-              <h3 class="card-title">Dự án Javalorant</h3>
-              <p class="card-desc">
-                Tựa game thay thế Pubg
-              </p>
-              <ul class="tag-list">
-                <li>HTML</li>
-                <li>CSS</li>
-                <li>Grid</li>
-              </ul>
-              <a class="card-link" href="#">Xem chi tiết →</a>
+              <div>
+                <h3 class="card-title">Dự án Javalorant</h3>
+                <p class="card-desc">Tựa game thay thế Pubg</p>
+              </div>
+              <div class="card-bottom">
+                <ul class="tag-list mono">
+                  <li>HTML</li>
+                  <li>CSS</li>
+                  <li>Grid</li>
+                </ul>
+                <a class="card-link" href="#">Xem chi tiết →</a>
+              </div>
             </div>
           </article>
 
-          <article class="card">
-            <img class="card-media"
-              src="./assets/img/lmht.jfif"
-              alt="Ảnh minh họa dự án HTLMHT" width="600" height="360" />
+          <article class="card" style="--card-accent: #00f5d4;">
+            <div class="card-media-box">
+              <img class="card-media" src="./assets/img/lmht.jfif" alt="Ảnh minh họa dự án HTLMHT" width="600" height="360" />
+              <span class="card-chip mono">💎 WEB APP</span>
+            </div>
             <div class="card-body">
-              <h3 class="card-title">Ứng dụng HTLMHT</h3>
-              <p class="card-desc">
-                Ứng dụng quản lý thời gian với lưu trữ cục bộ và giao diện tối giản.
-              </p>
-              <ul class="tag-list">
-                <li>JavaScript</li>
-                <li>Flexbox</li>
-              </ul>
-              <a class="card-link" href="#">Xem chi tiết →</a>
+              <div>
+                <h3 class="card-title">Ứng dụng HTLMHT</h3>
+                <p class="card-desc">Ứng dụng quản lý thời gian với lưu trữ cục bộ và giao diện tối giản.</p>
+              </div>
+              <div class="card-bottom">
+                <ul class="tag-list mono">
+                  <li>JavaScript</li>
+                  <li>Flexbox</li>
+                </ul>
+                <a class="card-link" href="#">Xem chi tiết →</a>
+              </div>
             </div>
           </article>
 
-          <article class="card">
-            <img class="card-media"
-              src="./assets/img/csgo.jfif"
-              alt="Ảnh minh họa dự án C++SGO" width="600" height="360" />
+          <article class="card" style="--card-accent: #ffbe0b;">
+            <div class="card-media-box">
+              <img class="card-media" src="./assets/img/csgo.jfif" alt="Ảnh minh họa dự án C++SGO" width="600" height="360" />
+              <span class="card-chip mono">🔥 API DASHBOARD</span>
+            </div>
             <div class="card-body">
-              <h3 class="card-title">C++SGO</h3>
-              <p class="card-desc">
-                Bảng điều khiển bắn súng lấy dữ liệu từ API công khai, hiển thị theo thẻ.
-              </p>
-              <ul class="tag-list">
-                <li>API</li>
-                <li>Grid</li>
-              </ul>
-              <a class="card-link" href="#">Xem chi tiết →</a>
+              <div>
+                <h3 class="card-title">C++SGO</h3>
+                <p class="card-desc">Bảng điều khiển bắn súng lấy dữ liệu từ API công khai, hiển thị theo thẻ.</p>
+              </div>
+              <div class="card-bottom">
+                <ul class="tag-list mono">
+                  <li>API</li>
+                  <li>Grid</li>
+                </ul>
+                <a class="card-link" href="#">Xem chi tiết →</a>
+              </div>
             </div>
           </article>
 
-          <article class="card">
-            <img class="card-media"
-              src="./assets/img/pubg.jfif"
-              alt="Ảnh minh họa dự án pubg" width="600" height="360" />
+          <article class="card" style="--card-accent: #b5179e;">
+            <div class="card-media-box">
+              <img class="card-media" src="./assets/img/pubg.jfif" alt="Ảnh minh họa dự án pubg" width="600" height="360" />
+              <span class="card-chip mono">👑 500 VIEW META</span>
+            </div>
             <div class="card-body">
-              <h3 class="card-title">Game Chết</h3>
-              <p class="card-desc">
-                Con game ưu tiên 500 view hơn thị trường nhiều người chơi thứ 2 cả game
-              </p>
-              <ul class="tag-list">
-                <li>HTML</li>
-                <li>CSS</li>
-              </ul>
-              <a class="card-link" href="#">Xem chi tiết →</a>
+              <div>
+                <h3 class="card-title">Game Chết</h3>
+                <p class="card-desc">Con game ưu tiên 500 view hơn thị trường nhiều người chơi thứ 2 cả game</p>
+              </div>
+              <div class="card-bottom">
+                <ul class="tag-list mono">
+                  <li>HTML</li>
+                  <li>CSS</li>
+                </ul>
+                <a class="card-link" href="#">Xem chi tiết →</a>
+              </div>
             </div>
           </article>
-
-        </div><!-- /.project-grid -->
-      </div>
-    </section>
-
-    <!-- ----- SECTION: Liên hệ  ----- -->
-    <section id="contact" class="section pt-10 pb-20">
-      <div class="container flex justify-center">
-          
-        <!-- Khối chứa toàn bộ nội dung Form -->
-        <div class="relative w-full max-w-[1100px] bg-[#ffb8b8] rounded-xl overflow-hidden flex flex-col md:flex-row shadow-2xl">
-
-            <!-- Cột trái: Hình ảnh -->
-            <div class="w-full md:w-5/12 h-64 md:h-auto flex items-end justify-center bg-gray-200">
-                <img src="./assets/img/jett.jfif" 
-                     alt="Contact Image" 
-                     class="w-full h-full object-cover object-center md:object-cover">
-            </div>
-
-            <!-- Cột phải: Form liên hệ -->
-            <div class="w-full md:w-7/12 p-8 md:p-14 lg:pr-32 text-left">
-                <h2 class="text-3xl font-bold text-gray-900 mb-3">Bạn cần hỗ trợ?</h2>
-                <p class="text-gray-800 text-sm mb-8 leading-relaxed font-medium">
-                    Tôi rất sẵn lòng trao đổi về các cơ hội thực tập, việc làm Frontend hoặc các dự án hợp tác. Hãy để lại thông tin nhé.
-                </p>
-
-                <form action="#" method="POST">
-                    <!-- Hàng 1: Họ tên và Email -->
-                    <div class="flex flex-col md:flex-row gap-6 mb-5">
-                        <div class="flex-1">
-                            <label class="block text-gray-700 text-sm font-semibold mb-2">Họ tên*</label>
-                            <input type="text" placeholder="Tên đầy đủ" required
-                                   class="input-field w-full px-4 py-3 rounded-md border-0 text-gray-800 placeholder-gray-400 bg-white focus:ring-2 focus:ring-white">
-                        </div>
-                        <div class="flex-1">
-                            <label class="block text-gray-700 text-sm font-semibold mb-2">Email*</label>
-                            <input type="email" placeholder="Địa chỉ email" required
-                                   class="input-field w-full px-4 py-3 rounded-md border-0 text-gray-800 placeholder-gray-400 bg-white focus:ring-2 focus:ring-white">
-                        </div>
-                    </div>
-
-                    <!-- Hàng 2: Tin nhắn -->
-                    <div class="mb-6">
-                        <label class="block text-gray-700 text-sm font-semibold mb-2">Tin nhắn*</label>
-                        <textarea placeholder="Nội dung công việc, lời nhắn..." rows="5" required
-                                  class="input-field w-full px-4 py-3 rounded-md border-0 text-gray-800 placeholder-gray-400 bg-white resize-none focus:ring-2 focus:ring-white"></textarea>
-                    </div>
-
-                    <!-- Nút Gửi -->
-                    <button type="submit"
-                            class="bg-black hover:bg-gray-800 text-white font-semibold py-3 px-12 rounded-md transition duration-300">
-                        Gửi
-                    </button>
-                </form>
-            </div>
-
-            <!-- Thanh Icon Mạng Xã Hội -->
-            <div class="absolute right-4 md:right-6 top-1/2 transform -translate-y-1/2 bg-white rounded-full py-5 px-3 flex flex-col gap-6 shadow-lg z-10">
-                <a href="mailto:hungkanji01@gmail.com" class="text-gray-800 hover:text-black transition text-xl flex justify-center" title="Gửi Email">
-                    <i class="fas fa-envelope"></i>
-                </a>
-                <a href="https://github.com/hungkanji" target="_blank" class="text-gray-800 hover:text-black transition text-xl flex justify-center" title="GitHub">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="https://linkedin.com/in/hungkanji" target="_blank" class="text-gray-800 hover:text-black transition text-xl flex justify-center" title="LinkedIn">
-                    <i class="fab fa-linkedin-in"></i>
-                </a>
-            </div>
-
         </div>
       </div>
     </section>
+
+    <!-- ----- SECTION: LIÊN HỆ ----- -->
+    <section id="contact" class="section">
+      <div class="container">
+        <div class="contact-wrap">
+          <div class="contact-inner">
+            <div class="contact-img-side">
+              <img src="./assets/img/jett.jfif" alt="Contact Image" />
+            </div>
+
+            <div class="contact-form-side">
+              <span class="section-eyebrow mono">// CONNECT WITH HÙNGKANJI</span>
+              <h2 class="section-title">Bạn cần hỗ trợ?</h2>
+              <p class="section-sub" style="margin-bottom: 24px;">
+                Tôi rất sẵn lòng trao đổi về các cơ hội thực tập, việc làm Frontend hoặc các dự án hợp tác. Hãy để lại thông tin nhé.
+              </p>
+
+              <form action="#" method="POST">
+                <div class="form-grid">
+                  <div>
+                    <label class="form-label mono">Họ tên*</label>
+                    <input type="text" placeholder="Tên đầy đủ" required class="input-field" />
+                  </div>
+                  <div>
+                    <label class="form-label mono">Email*</label>
+                    <input type="email" placeholder="Địa chỉ email" required class="input-field" />
+                  </div>
+                </div>
+
+                <div style="margin-bottom: 22px;">
+                  <label class="form-label mono">Tin nhắn*</label>
+                  <textarea placeholder="Nội dung công việc, lời nhắn..." rows="4" required class="input-field"></textarea>
+                </div>
+
+                <button type="submit" class="btn btn-primary">
+                  <span>Gửi tin nhắn</span>
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </form>
+            </div>
+
+            <div class="social-bar">
+              <a href="mailto:hungkanji01@gmail.com" title="Gửi Email"><i class="fas fa-envelope"></i></a>
+              <a href="https://github.com/hungkanji" target="_blank" rel="noopener" title="GitHub"><i class="fab fa-github"></i></a>
+              <a href="https://linkedin.com/in/hungkanji" target="_blank" rel="noopener" title="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container mono">
+      © 2026 Phạm Quốc Hùng (@HùngKanji) · Crafted with Neon Cyber UI &amp; Semantic HTML5
+    </div>
+  </footer>
+
+  <!-- SCRIPT: Đổi Theme + Chữ gõ tự động + Hạt Neon Laser tương tác chuột -->
+  <script>
+    // 1. Chuyển đổi 3 hệ màu
+    const themes = [
+      { id: 'blackpink', label: 'Neon·Cyber' },
+      { id: 'aincrad', label: 'Aincrad·SAO' },
+      { id: 'valorant', label: 'Jett·Radiant' }
+    ];
+    let tIdx = 0;
+    const tBtn = document.getElementById('themeToggle');
+    const tLbl = document.getElementById('themeLabel');
+    tBtn.addEventListener('click', () => {
+      tIdx = (tIdx + 1) % themes.length;
+      document.body.setAttribute('data-theme', themes[tIdx].id);
+      tLbl.textContent = themes[tIdx].label;
+    });
+
+    // 2. Hiệu ứng gõ chữ Typewriter ở phần giới thiệu
+    const roles = [
+      "Frontend Developer & UI Enthusiast",
+      "Creative Coder & Gamer (@HùngKanji)",
+      "Responsive Web & Cyber UI Designer"
+    ];
+    let rIdx = 0, charIdx = 0, deleting = false;
+    const typeEl = document.getElementById('typewriter');
+    function typeLoop() {
+      const current = roles[rIdx];
+      typeEl.textContent = current.substring(0, charIdx);
+      if (!deleting && charIdx < current.length) {
+        charIdx++;
+        setTimeout(typeLoop, 55);
+      } else if (deleting && charIdx > 0) {
+        charIdx--;
+        setTimeout(typeLoop, 30);
+      } else {
+        deleting = !deleting;
+        if (!deleting) rIdx = (rIdx + 1) % roles.length;
+        setTimeout(typeLoop, deleting ? 1800 : 300);
+      }
+    }
+    typeLoop();
+
+    // 3. Canvas hạt Neon nối tia Laser theo chuột
+    const canvas = document.getElementById('cyberCanvas');
+    const ctx = canvas.getContext('2d');
+    let w, h, particles = [];
+    const mouse = { x: -999, y: -999 };
+
+    function resize() {
+      w = canvas.width = window.innerWidth;
+      h = canvas.height = window.innerHeight;
+    }
+    window.addEventListener('resize', resize);
+    resize();
+
+    window.addEventListener('mousemove', e => {
+      mouse.x = e.clientX;
+      mouse.y = e.clientY;
+    });
+
+    const colors = ['#ff2a85', '#00f5d4', '#9d4edd', '#ffbe0b'];
+    for (let i = 0; i < 55; i++) {
+      particles.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.8,
+        vy: (Math.random() - 0.5) * 0.8,
+        r: Math.random() * 2.2 + 1,
+        c: colors[i % colors.length]
+      });
+    }
+
+    function animate() {
+      ctx.clearRect(0, 0, w, h);
+      particles.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        if (p.x < 0 || p.x > w) p.vx *= -1;
+        if (p.y < 0 || p.y > h) p.vy *= -1;
+
+        ctx.beginPath();
+        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+        ctx.fillStyle = p.c;
+        ctx.fill();
+
+        const dx = mouse.x - p.x;
+        const dy = mouse.y - p.y;
+        const dist = Math.hypot(dx, dy);
+        if (dist < 150) {
+          ctx.beginPath();
+          ctx.moveTo(p.x, p.y);
+          ctx.lineTo(mouse.x, mouse.y);
+          ctx.strokeStyle = `rgba(0, 245, 212, ${1 - dist / 150})`;
+          ctx.lineWidth = 0.8;
+          ctx.stroke();
+        }
+      });
+      requestAnimationFrame(animate);
+    }
+    animate();
+  </script>
 </body>
 
 </html>
